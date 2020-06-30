@@ -82,13 +82,22 @@ In general, change global variables into parameters and return values, or put th
 #### Methods should return results not print them:
 In general, only the highest-level parts of a program should interact with the human user or the console. Lower-level parts should take their input as parameters and return their output as results. The sole exception here is debugging output, which can of course be printed to the console.
 
+## Reading 5: Version Controlling
+
+some git commands or terms I didn't know:
+1- Git show: shows the details of the latest commit. (the message and the modifications)
+2- Git commit: without -m we can commit, then the editor pops up and asks for inputting the message.
+3- Staged vs unstaged changes: unstaged means not added. staged means already added but could be committed or not committed.
+4- Git diff: shows the difference between the unstaged changes with the latest commit.
+5- Git diff --staged: shows the difference between the staged changes(but not committed) with the latest commit.
+[here](https://git-scm.com/book/en/v2) is the full resource about Git.
 
 
 
 
 
 
-
+ 
 
 
 
@@ -98,5 +107,4 @@ In general, only the highest-level parts of a program should interact with the h
 
 
 > Written with [StackEdit](https://stackedit.io/).
-
 
