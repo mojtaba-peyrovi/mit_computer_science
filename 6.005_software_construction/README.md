@@ -93,6 +93,35 @@ some git commands or terms I didn't know:
 [here](https://git-scm.com/book/en/v2) is the full resource about Git.
 
 
+## Reading 6: Specifications
+
+types of specifications:
+-   a  _precondition_ , indicated by the keyword  _requires_  The precondition is an obligation on the client
+-   a  _postcondition_ , indicated by the keyword  _effects_ The postcondition is an obligation on the implementer of the method.
+In order to write specifications, we should put the preconditions into `@param` where possible, and postconditions into `@return` and `@throws` . So a specification like this:
+
+Here is an example:
+```java
+/**
+ * Find a value in an array.
+ * @param arr array to search, requires that val occurs exactly once
+ *            in arr
+ * @param val value to search for
+ * @return index i such that arr[i] = val
+ */
+static int find(int[] arr, int val)
+```
+#### Javadoc: 
+In Java programming, we can use the **javadoc** tool for generating API documentation from comments embedded in source code (Javadoc comments).  
+For using it, Eclipse has  a **Javadoc Generation** wizard.  
+[here](https://www.codejava.net/ides/eclipse/how-to-generate-javadoc-in-eclipse](https://www.codejava.net/ides/eclipse/how-to-generate-javadoc-in-eclipse) is a link about how to create javadoc in Eclipse.
+
+ - Null values are troublesome and unsafe, so much so that you’re well advised to remove them from your design vocabulary.
+
+#### Guava: Google Core Libraries for Java
+Guava is a set of core Java libraries from Google that includes new collection types (such as multimap and multiset), immutable collections, a graph library, and utilities for concurrency, I/O, hashing, caching, primitives, strings, and more! It is widely used on most Java projects within Google, and widely used by many other companies as well.
+
+A specification of a method can talk about the parameters and return value of the method, but it should never talk about local variables of the method or private fields of the method’s class. In Java, the source code of the method is often unavailable to the reader of your spec.
 
 
 
