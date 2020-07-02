@@ -124,6 +124,60 @@ Guava is a set of core Java libraries from Google that includes new collection t
 A specification of a method can talk about the parameters and return value of the method, but it should never talk about local variables of the method or private fields of the method’s class. In Java, the source code of the method is often unavailable to the reader of your spec.
 
 
+## Reading 7: Designing Specifications
+For providing specs, we need to measure three things:
+- How **deterministic** it is. Does the spec define only a single possible output for a given input, or allow the implementor to choose from a set of legal outputs?
+- How **declarative** it is. Does the spec just characterize _what_ the output should be, or does it explicitly say _how_ to compute the outpu
+- How **strong** it is. Does the spec have a small set of legal implementations, or a large set?
+
+Deterministic:
+Imagine this method which finds the index in a list of integers, if the value is equal to a given integer:
+```
+static int find(int[] arr, int val) {
+    for (int i = 0; i < arr.length; i++) {
+        if (arr[i] == val) return i;
+    }
+    return arr.length;
+}
+```
+this spec is deterministic:
+```
+  _requires_: val occurs **exactly once** in arr
+  _effects_:  returns index i such that arr[i] = val
+```
+because the input and output are completely determined. But the following is not deterministic:
+```
+ requires: val occurs in arr
+  effects:  returns index i such that arr[i] = val
+```
+Because it doesn’t say which index is returned if `val` occurs more than once.
+The ones that are not deterministic like the case above, we call them **Underdetermined.** but they are different from nondeterministic.
+**nondeterministic specs:** sometimes behaves one way, and sometimes another way. for example if the method is using a random number, or has date as its input.
+**Operational Specs:** They give a series of steps that the method performs.
+**Declarative Specs:** They just give properties of the final outcome, and how it’s related to the initial state.
+>Almost always, declarative specifications are preferable. They’re usually shorter, easier to understand, and most importantly, they don’t inadvertently expose implementation details that a client may rely on.
+One reason programmers sometimes lapse into operational specifications is because they’re using the spec comment to explain the implementation for a maintainer. Don’t do that. When it’s necessary, use comments within the body of the method, not in the spec comment.
+
+**Strong vs Weak conditions:**  If you want to update a spec, you can always weaken the precondition; placing fewer demands on a client will never upset them. And you can always strengthen the post-condition, which means making more promises.
+For example this condition:
+```
+_requires_: val occurs **exactly once** in a
+  _effects_:  returns index i such that a[i] = val
+```
+can be replaced with:
+```
+  _requires_: val occurs **at least once** in a
+  _effects_:  returns index i such that a[i] = val
+```
+which has weaker preconditions, but we can make the effects part (implementor) to be:
+ ```
+  _effects_:  returns lowest index i such that a[i] = val
+ ```
+ It has a stronger postcondition.
+ - The 	specifications should be abstract types where possible. Writing our specification with _abstract types_ gives more freedom to both the client and the implementor. In Java, this often means using an interface type, like `Map` or `Reader` , instead of specific implementation types like `HashMap` or `FileReader`.
+ What if the client wants to use another kind of map, but you explicitly say you expect a hashMap?
+ **About Access Controlling:**
+- Keeping internal things _private_ makes your class’s public interface smaller and more coherent (meaning that it does one thing and does it well). Your code will be **easier to understand** and **safer from bugs.**
 
 
  
