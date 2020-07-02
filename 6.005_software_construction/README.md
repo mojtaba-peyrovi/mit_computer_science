@@ -188,6 +188,3 @@ which has weaker preconditions, but we can make the effects part (implementor) t
 
 
 
-
-> Written with [StackEdit](https://stackedit.io/).
-
