@@ -180,6 +180,112 @@ which has weaker preconditions, but we can make the effects part (implementor) t
 - Keeping internal things _private_ makes your class’s public interface smaller and more coherent (meaning that it does one thing and does it well). Your code will be **easier to understand** and **safer from bugs.**
 
 
+## Reading 8: Avoiding Debugging
+
+The very first defense is:
+>Make bugs impossible by design
+
+One way of making bugs impossible, is **static checking.** Other languages like C or Python silently let the bad access happen, and they have security vulnerabilities.
+The other design principle is **Immutability** which means not to let variables to be overwritten after creation.
+
+second defense:
+>Localize bugs, by defining error handling
+
+Example:
+```java
+/**
+ * @param x  requires x >= 0
+ * @return approximation to square root of x
+ */
+public double sqrt(double x) { ... }
+```
+In order to localize the potential bugs to be easily found, we can make sure the parameter passed into the method, is positive, and if it is negative we can return an assertion error:
+```java
+/**
+ * @param x  requires x >= 0
+ * @return approximation to square root of x
+ */
+public double sqrt(double x) { 
+    if (! (x >= 0)) throw new AssertionError();
+    ...
+}
+```
+Checking preconditions is an example of **Defensive Programming.**
+
+In order to enforce the precondition of a method, we can assert the condition and the result of it can be a record in log, break the program, or email the maintainer.
+ >An assertion is executable code that enforces the assumption at runtime.
+
+We can define the simple assertion like this:
+```java
+assert x >= 0;
+```
+or also we can add more details to it by writing some description following the main assertion by a colon, e.g.
+```java
+assert (x >= 0) : "x is " + x;
+```
+if x== -1, the assertion result will be:
+> x is -1
+
+In Java, the assertions are off by default. you have to turn them on by passing the argument -ea to the Java VM. In eclipse, add -ea here:
+> Preferences → Java → Installed JREs → Edit → Default VM Arguments
+
+IMPORTANT:
+>Never use assertions to test conditions that are external to your program, such as the existence of files, the availability of the network, or the correctness of input typed by a human user.
+>External failures are not bugs, and there is no change you can make to your program in advance that will prevent them from happening. External failures should be handled using exceptions instead.
+
+### Incremental Development:
+A great way to localize bugs to a tiny part of the program is incremental development. Build only a bit of your program at a time, and test that bit thoroughly before you move on. That way, when you discover a bug, it’s more likely to be in the part that you just wrote, rather than anywhere in a huge pile of code.
+
+### Other Techniques to Avoid Bugs:
+**Modularity:** Modularity means dividing up a system into components, or modules, each of which can be designed, implemented, tested, reasoned about, and reused separately from the rest of the system. The opposite of a modular system is a monolithic system – big and with all of its pieces tangled up and dependent on each other.
+>A program consisting of a single, very long main() function is monolithic – harder to understand, and harder to isolate bugs in. By contrast, a program broken up into small functions and classes is more modular.
+
+**Encapsulation:** Encapsulation means building walls around a module (a hard shell or capsule) so that the module is responsible for its own internal behavior, and bugs in other parts of the system can’t damage its integrity.
+One kind of encapsulation is **[access control](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html)** , using `public` and `private` to control the visibility and accessibility of your variables and methods.
+Another kind of encapsulation comes from **variable scope** .
+For example, suppose you have a loop like this:
+```java
+for (i = 0; i < 100; ++i) {
+    ...
+    doSomeThings();
+    ...
+}
+```
+and you’ve discovered that this loop keeps running forever – `i` never reaches 100. Somewhere, somebody is changing `i` . But where? If `i` is declared as a global variable like this:
+```java
+public static int i;
+...
+for (i = 0; i < 100; ++i) {
+    ...
+    doSomeThings();
+    ...
+}
+```
+then its scope is the entire program. It might be changed anywhere in your program: by `doSomeThings()` , by some other method that `doSomeThings()` calls, by a concurrent thread running some completely different code. But if `i` is instead declared as a local variable with a narrow scope, like this:
+```java
+for (int i = 0; i < 100; ++i) {
+    ...
+    doSomeThings();
+    ...
+}
+```
+then the only place where `i` can be changed is within the for statement.
+>**Minimizing the scope of variables** is a powerful practice for bug localization.
+
+Here are a few rules that are good for Java:
+1- **Always declare a loop variable in the for-loop initializer.** So rather than declaring it before the loop:
+```java
+int i;
+for (i = 0; i < 100; ++i) {
+```
+which makes the scope of the variable the entire rest of the outer curly-brace block containing this code, you should do this:
+
+```java
+for (int i = 0; i < 100; ++i) {
+```
+which makes the scope of `i` limited just to the for loop.
+2- **Declare a variable only when you first need it, and in the innermost curly-brace block that you can.** Variable scopes in Java are curly-brace blocks, so put your variable declaration in the innermost one that contains all the expressions that need to use the variable. Don’t declare all your variables at the start of the function – it makes their scopes unnecessarily large. But note that in languages without static type declarations, like Python and Javascript, the scope of a variable is normally the entire function anyway, so you can’t restrict the scope of a variable with curly braces, alas.
+3- **Avoid global variables.** Very bad idea, especially as programs get large.
  
 
 
