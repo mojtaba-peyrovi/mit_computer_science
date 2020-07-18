@@ -94,8 +94,7 @@ some git commands or terms I didn't know:
 
 
 ## Reading 6: Specifications
-
-types of specifications:
+ types of specifications:
 -   a  _precondition_ , indicated by the keyword  _requires_  The precondition is an obligation on the client
 -   a  _postcondition_ , indicated by the keyword  _effects_ The postcondition is an obligation on the implementer of the method.
 In order to write specifications, we should put the preconditions into `@param` where possible, and postconditions into `@return` and `@throws` . So a specification like this:
@@ -122,7 +121,6 @@ For using it, Eclipse has  a **Javadoc Generation** wizard.
 Guava is a set of core Java libraries from Google that includes new collection types (such as multimap and multiset), immutable collections, a graph library, and utilities for concurrency, I/O, hashing, caching, primitives, strings, and more! It is widely used on most Java projects within Google, and widely used by many other companies as well.
 
 A specification of a method can talk about the parameters and return value of the method, but it should never talk about local variables of the method or private fields of the method’s class. In Java, the source code of the method is often unavailable to the reader of your spec.
-
 
 ## Reading 7: Designing Specifications
 For providing specs, we need to measure three things:
@@ -286,11 +284,54 @@ for (int i = 0; i < 100; ++i) {
 which makes the scope of `i` limited just to the for loop.
 2- **Declare a variable only when you first need it, and in the innermost curly-brace block that you can.** Variable scopes in Java are curly-brace blocks, so put your variable declaration in the innermost one that contains all the expressions that need to use the variable. Don’t declare all your variables at the start of the function – it makes their scopes unnecessarily large. But note that in languages without static type declarations, like Python and Javascript, the scope of a variable is normally the entire function anyway, so you can’t restrict the scope of a variable with curly braces, alas.
 3- **Avoid global variables.** Very bad idea, especially as programs get large.
- 
+
+## # Reading 9: Mutability & Immutability
+
+**Immutable Objects:** once created, they always represent the same value. [`String`](https://docs.oracle.com/javase/8/docs/api/?java/lang/String.html) is an example of an immutable type.
+**Mutable Objects:** they have methods that change the value of the object. [`StringBuilder`](https://docs.oracle.com/javase/8/docs/api/?java/lang/StringBuilder.html) is an example of a mutable type.
+Here is an example of when we want to add letter "c" to a String and a StringBuilder:
+```java
+String t = s;
+t = t + "c";
+
+StringBuilder tb = sb;
+tb.append("c");
+```
+Why do we need mutable objects? when we have a for loop of adding characters to a string, the traditional way of String adding one by one making a copy and adding the next letter, and make the script run slower. like this:
+```java
+String s = "";
+for (int i = 0; i < n; ++i) {
+    s = s + n;
+}
+```
+we can convert it  to:
+```java
+StringBuilder sb = new StringBuilder();
+for (int i = 0; i < n; ++i) {
+  sb.append(String.valueOf(i));
+}
+String s = sb.toString();
+```
+#### Risks for Mutation:
+**immutable types are safer from bugs, easier to understand, and more ready for change** . Mutability makes it harder to understand what your program is doing, and much harder to enforce contracts.
+
+#### Iterator: 
+Another mutable object is iterator() which loops through a list or array elements. 
+example:
+```java
+List<String> lst = ...;
+Iterator iter = lst.iterator();
+while (iter.hasNext()) {
+    String str = iter.next();
+    System.out.println(str);
+}
+```
+-   `next()` returns the next element in the collection
+-   `hasNext()` tests whether the iterator has reached the end of the collection.
 
 
 
 
 
-
+> Written with [StackEdit](https://stackedit.io/).
 
