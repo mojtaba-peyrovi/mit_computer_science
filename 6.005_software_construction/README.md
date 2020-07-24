@@ -329,6 +329,79 @@ while (iter.hasNext()) {
 -   `next()` returns the next element in the collection
 -   `hasNext()` tests whether the iterator has reached the end of the collection.
 
+## Reading 10: Recursion
+Recursion means calling the method inside itself. The classic example is
+calculating factorial. Here is the traditional linear way of calculating it, is to say n x (n-1) x (n-2) x ... x 1
+```java
+public static long factorial(int n) {
+  long fact = 1;
+  for (int i = 1; i <= n; i++) {
+    fact = fact * i;
+  }
+  return fact;
+}
+```
+But the way of doing it with recursion, is this:
+```java
+public static long factorial(int n) {
+  if (n == 0) {
+    return 1;
+  } else {
+    return n * factorial(n-1);
+  }
+}
+```
+Another example that we can calculate recursively is Fibbonnacci series:
+```java
+/**
+ * @param n >= 0
+ * @return the nth Fibonacci number 
+ */
+public static int fibonacci(int n) {
+    if (n == 0 || n == 1) {
+        return 1; // base cases
+    } else {
+        return fibonacci(n-1) + fibonacci(n-2); // recursive step
+    }
+}
+```
+A recursive implementation always has two parts:
+
+-   **base case** , which is the simplest, smallest instance of the problem, that can’t be decomposed any further. Base cases often correspond to emptiness – the empty string, the empty list, the empty set, the empty tree, zero, etc.
+    
+-   **recursive step** , which  **decomposes** a larger instance of the problem into one or more simpler or smaller instances that can be solved by recursive calls, and then  **recombines** the results of those subproblems to produce the solution to the original problem.
+
+It’s important for the recursive step to transform the problem instance into something smaller, otherwise the recursion may never end.
+
+Sometimes, the data we use, is recursive in nature. A good example if filesystem object  in Java, which is the folder structure of the system.  in java it looks like this java.io.File. If we want to get the full path of a file, we can write it recursively:
+```java
+/**
+ * @param f a file in the filesystem
+ * @return the full pathname of f from the root of the filesystem
+ */
+public static String fullPathname(File f) {
+    if (f.getParentFile() == null) {
+        // base case: f is at the root of the filesystem
+        return f.getName();  
+    } else {
+        // recursive step
+        return fullPathname(f.getParentFile()) + "/" + f.getName();
+    }
+}
+```
+
+
+
+
+
+Mutual recursion between two or more functions is another way this can happen – A calls B, which calls A again. Direct mutual recursion is virtually always intentional and designed by the programmer. But unexpected mutual recursion can lead to bugs.
+
+#### Two common mistakes in recursion:
+
+-   The base case is missing entirely, or the problem needs more than one base case but not all the base cases are covered.
+-   The recursive step doesn’t reduce to a smaller subproblem, so the recursion doesn’t converge.
+
+Look for these when you’re debugging.
 
 
 
