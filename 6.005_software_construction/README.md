@@ -404,6 +404,16 @@ Mutual recursion between two or more functions is another way this can happen â€
 Look for these when youâ€™re debugging.
 
 
+## Reading 11: Debugging:
+
+The first step should be reproducing the bug. First we need to see which test case is failing. Then we should see how to limit the input and see if the app still produces the bug or not. For example if the input is a text, try to see if:
+
+- half of the text produces the same bug
+- does a single iteration produce the same bug
+- etc.
+The next step will be finding a fix for the bug. Try to fix it in a way that it never happens again. For example if it is a design issue, try to trace back and find the root cause and try to fix it and if necessary change the design.
+Finally, after fixing the bug, think about whether you made the same mistake anywhere else or not, and try to think if this fix will affect anything else in your code or not.
+
 
 
 > Written with [StackEdit](https://stackedit.io/).
