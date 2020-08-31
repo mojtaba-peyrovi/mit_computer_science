@@ -285,7 +285,7 @@ which makes the scope of `i` limited just to the for loop.
 2- **Declare a variable only when you first need it, and in the innermost curly-brace block that you can.** Variable scopes in Java are curly-brace blocks, so put your variable declaration in the innermost one that contains all the expressions that need to use the variable. Don’t declare all your variables at the start of the function – it makes their scopes unnecessarily large. But note that in languages without static type declarations, like Python and Javascript, the scope of a variable is normally the entire function anyway, so you can’t restrict the scope of a variable with curly braces, alas.
 3- **Avoid global variables.** Very bad idea, especially as programs get large.
 
-## # Reading 9: Mutability & Immutability
+## Reading 9: Mutability & Immutability
 
 **Immutable Objects:** once created, they always represent the same value. [`String`](https://docs.oracle.com/javase/8/docs/api/?java/lang/String.html) is an example of an immutable type.
 **Mutable Objects:** they have methods that change the value of the object. [`StringBuilder`](https://docs.oracle.com/javase/8/docs/api/?java/lang/StringBuilder.html) is an example of a mutable type.
@@ -390,10 +390,6 @@ public static String fullPathname(File f) {
 }
 ```
 
-
-
-
-
 Mutual recursion between two or more functions is another way this can happen – A calls B, which calls A again. Direct mutual recursion is virtually always intentional and designed by the programmer. But unexpected mutual recursion can lead to bugs.
 
 #### Two common mistakes in recursion:
@@ -402,7 +398,6 @@ Mutual recursion between two or more functions is another way this can happen �
 -   The recursive step doesn’t reduce to a smaller subproblem, so the recursion doesn’t converge.
 
 Look for these when you’re debugging.
-
 
 ## Reading 11: Debugging:
 
@@ -413,6 +408,50 @@ The first step should be reproducing the bug. First we need to see which test ca
 - etc.
 The next step will be finding a fix for the bug. Try to fix it in a way that it never happens again. For example if it is a design issue, try to trace back and find the root cause and try to fix it and if necessary change the design.
 Finally, after fixing the bug, think about whether you made the same mistake anywhere else or not, and try to think if this fix will affect anything else in your code or not.
+
+## Reading 12: Abstract Data Types (ADT):
+
+It sometimes comes in different names such as:
+-   **Abstraction.** Omitting or hiding low-level details with a simpler, higher-level idea.
+-   **Modularity.** Dividing a system into components or modules, each of which can be designed, implemented, tested, reasoned about, and reused separately from the rest of the system.
+-   **Encapsulation.** Building walls around a module (a hard shell or capsule) so that the module is responsible for its own internal behavior, and bugs in other parts of the system can’t damage its integrity.
+-   **Information hiding.** Hiding details of a module’s implementation from the rest of the system, so that those details can be changed later without changing the rest of the system.
+-   **Separation of concerns.** Making a feature (or “concern”) the responsibility of a single module, rather than spreading it across multiple modules.
+This idea enables us to separate how we use  a data structure in a program from the particular form of the data structure itself.
+
+Traditional programming style came with the idea of using built-in data types such as string, integer, etc. but:
+>A major advance in software development was the idea of abstract types: that one could design a programming language to allow user-defined types, too.
+
+ The operations of an abstract type are classified as follows:
+
+-   **Creators** create new objects of the type. A creator may take an object as an argument, but not an object of the type being constructed.
+-   **Producers** create new objects from old objects of the type. The  `concat` method of  `String` , for example, is a producer: it takes two strings and produces a new one representing their concatenation.
+-   **Observers** take objects of the abstract type and return objects of a different type. The  `size` method of  `List` , for example, returns an  `int` .
+-   **Mutators** change objects. The  `add` method of  `List` , for example, mutates a list by adding an element to the end.
+
+#### Examples:
+**`int`** is Java’s primitive integer type.  `int` is immutable, so it has no mutators.
+
+-   creators: the numeric literals  `0` ,  `1` ,  `2` , …
+-   producers: arithmetic operators  `+` ,  `-` ,  `*` ,  `/`
+-   observers: comparison operators  `==` ,  `!=` ,  `<` ,  `>`
+-   mutators: none (it’s immutable)
+
+## Reading 13: Abstraction Functions & Rep Invariants:
+An _invariant_ is a property of a program that is always true, for every possible runtime state of the program. Immutability is one crucial invariant that we’ve already encountered.
+Saying that the ADT _preserves its own invariants_ means that the ADT is responsible for ensuring that its own invariants hold. It doesn’t depend on good behavior from its clients.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
