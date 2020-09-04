@@ -441,6 +441,16 @@ Traditional programming style came with the idea of using built-in data types su
 An _invariant_ is a property of a program that is always true, for every possible runtime state of the program. Immutability is one crucial invariant that we’ve already encountered.
 Saying that the ADT _preserves its own invariants_ means that the ADT is responsible for ensuring that its own invariants hold. It doesn’t depend on good behavior from its clients.
 
+In general, you should carefully inspect the argument types and return types of all your ADT operations. If any of the types are mutable, make sure your implementation doesn’t return direct references to its representation. Doing that creates rep exposure.
+
+### Immutable Wrappers Around Mutable Data Types:
+
+The Java collections classes offer an interesting compromise: immutable wrappers.
+
+`Collections.unmodifiableList()` takes a (mutable)  `List` and wraps it with an object that looks like a  `List` , but whose mutators are disabled –  `set()` ,  `add()` ,  `remove()` , etc. throw exceptions. So you can construct a list using mutators, then seal it up in an unmodifiable wrapper (and throw away your reference to the original mutable list.
+
+
+
 
 
 
